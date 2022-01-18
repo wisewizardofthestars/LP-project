@@ -1,6 +1,6 @@
 %:- [codigo_comum, puzzles_publicos].
 
-% 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE
+% 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE, mooshak approved
 
 extrai_ilhas_linha(N_L, Linha, Ilhas) :- extrai_ilhas_linha(N_L, Linha, 1, Ilhas).
 extrai_ilhas_linha(_,[],_,[]).
@@ -14,21 +14,35 @@ extrai_ilhas_linha(N_L,[A|B],Cont,Res) :-
      Cont1 is Cont + 1,
      extrai_ilhas_linha(N_L,B,Cont1,Res).
 
-% 2.2 ilhas(Puz, Ilhas) :
+% 2.2 ilhas(Puz, Ilhas) : DONE, mooshak approved
 
-ilhas(Puz, Ilhas) :- ilhas(Puz,0,Ilhas).
+ilhas(Puz, IlhasF) :- ilhas(Puz,0,Ilhas),
+    append(Ilhas,IlhasF).
+ilhas([],_,[]).
 ilhas([A|B], Cont_linhas, [Y|X]):-
     Cont_linhas1 is Cont_linhas + 1,
-    extrai_ilhas(Cont_linhas1, A, Y),
+    extrai_ilhas_linha(Cont_linhas1, A, Y),
     ilhas(B, Cont_linhas1,X).
 
 % 2.3 vizinhas(Ilhas, Ilha, Vizinhas):
+% vizinhas([],_,[]).
+% vizinhas ([A|B],Ilha,[Y|X]) :-
 
-vizinhas([A|B], Ilha, [A|Res]) :- 
+% vizinhas([A|B], Ilha, [A|Res]) :- 
     
 
-% 2.4 estado(Ilhas, Estado):
+% 2.4 estado(Ilhas, Estado): cant test bc vizinhas isnt defined
+estado(Ilhas,Estado) :- 
+    estado(Ilhas, _, Estado).
+estado([],_,[]).
+estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
+    vizinhas(Ilhas,A,Y),
+    estado(Ilhas,B,Res).
+
+
+
 % 2.5 posicoes_entre(Pos1, Pos2, Posicoes):
+
 % 2.6 cria_ponte(Pos1, Pos2, Ponte):
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz):
 % 2.8 actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada):

@@ -19,7 +19,7 @@ DONE
 % ilhas (P2)
 %--------------------------------
 
-% Teste 3 - Publico
+% Teste 3 - Publico - DONE
 % Predicado ilhas (P2)
 % Cotacao total: 1
 % Cotacao parcial: 0
@@ -29,7 +29,7 @@ DONE
 :- Puz = [[1,0,4,0,1],[0,0,0,0,0],[0,0,2,0,0]], ilhas(Puz, Ilhas), writeln(Ilhas); writeln(false).
 % output: [ilha(1,(1,1)),ilha(4,(1,3)),ilha(1,(1,5)),ilha(2,(3,3))]
 
-% Teste 5 - Publico
+% Teste 5 - Publico - DONE
 % Predicado ilhas (P2)
 % Cotacao total: 1
 % Cotacao parcial: 0
