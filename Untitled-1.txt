@@ -15,5 +15,7 @@ satisfazem a condição posta;
 posição da Lista
     maplist/3 (transformação, lista original ,lista resultado)  ; 
 transforma os elementos da lista original;
+    setof/3 (X,condições,Lista) igual ao findall, no entanto resulta numa
+lista ordenada e sem duplicados
     
 

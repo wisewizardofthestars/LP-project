@@ -1,5 +1,6 @@
 %:- [codigo_comum, puzzles_publicos].
 
+N
 % 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE, mooshak approved
 
 extrai_ilhas_linha(N_L, Linha, Ilhas) :- extrai_ilhas_linha(N_L, Linha, 1, Ilhas).
@@ -25,15 +26,44 @@ ilhas([A|B], Cont_linhas, [Y|X]):-
     ilhas(B, Cont_linhas1,X).
 
 % 2.3 vizinhas(Ilhas, Ilha, Vizinhas):
-% vizinhas([],_,[]).
-% vizinhas ([A|B],Ilha,[Y|X]) :-
+vizinhas(Ilhas,Ilha,Vizinhas) :- vizinhas(Ilhas,Ilha,Vizinhas,Aux_coluna,Aux_linha).
+vizinhas([],_,[],_).
+vizinhas ([ilha(_,(Linha_o,Coluna_o))|B],ilha(_,(Linha,Coluna)),_,_,[[ilha(_,(Linha_o,Coluna_o))|X]) :-
+    Linha_o=:=Linha,
+    vizinhas(B,ilha(_,(Linha,Coluna)),_,_,X).
+vizinhas ([ilha(_,(Linha_o,Coluna_o))|B],ilha(_,(Linha,Coluna)),_,[[ilha(_,(Linha_o,Coluna_o))|X],_) :-
+    Coluna_o=:=Coluna,
+    vizinhas(B,ilha(_,(Linha,Coluna)),_,X,_).
+
+%new try with built in
+vizinhas(Ilhas,ilha(_,(Linha_og, Coluna_og)),Vizinhas,Linha,Coluna) :- 
+    findall(ilha(N_l,(Linha, Coluna)),(member(ilha(N_l,(Linha, Coluna)),Ilhas),Linha=:=Linha_og,Coluna\=Coluna_og),Lst_linhas),
+    findall(ilha(N_l,(Linha, Coluna)),(member(ilha(N_l,(Linha, Coluna)),Ilhas),Coluna=:=Coluna_og,Linha\=Linha_og),Lst_colunas),
+    writeln(Lst_linhas),
+    writeln(Lst_colunas).
+
+:- Ilhas = [ilha(1,(1,1)),ilha(4,(1,3)),ilha(1,(1,5)),ilha(2,(3,3))], vizinhas(Ilhas, ilha(4, (1, 3)), Vizinhas), writeln(Vizinhas); writeln(false). 
+% output: [ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))]
+
+
+
+    
+
+    
+
+    
+    
+    
+
 
 % vizinhas([A|B], Ilha, [A|Res]) :- 
     
 
 % 2.4 estado(Ilhas, Estado): cant test bc vizinhas isnt defined
 estado(Ilhas,Estado) :- 
-    estado(Ilhas, _, Estado).
+    Ilhas = [Ilha | _],
+    findall([X], member(X,Ilhas), Estado)
+    estado(Ilhas, Ilha, Estado).
 estado([],_,[]).
 estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
     vizinhas(Ilhas,A,Y),
