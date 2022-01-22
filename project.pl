@@ -49,13 +49,13 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
     writeln(Linha_og),
     writeln(Coluna_og),
     findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Linha=:=Linha_og,Coluna>Coluna_og),Colunas_Maiores),
-    %Mesma Linha Colunas maiores ou seja terá de ser o mini da diferença
+    %Mesma Linha Colunas maiores ou seja tera de ser o min da diferenca
     findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Linha=:=Linha_og,Coluna<Coluna_og),Colunas_Menores),
-    %Mesma Linha Colunas menores ou seja  terá de ser o máx de diferença
+    %Mesma Linha Colunas menores ou seja  tera de ser o max de diferenca
     findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Coluna=:=Coluna_og,Linha>Linha_og),Linhas_Maiores),
-    %Mesma Coluna, Linhas maiores ou seja terá de ser o min de diferença
+    %Mesma Coluna, Linhas maiores ou seja tera de ser o min de diferenca
     findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Coluna=:=Coluna_og,Linha<Linha_og),Linhas_Menores),
-    %Mesma Coluna , Linhas Menores ou seja terá de ser o maior de diferença
+    %Mesma Coluna , Linhas Menores ou seja tera de ser o maior de diferenca
     
     
     findall(ilha(N_L,(X,Y)),(member(ilha(N_L,(X,Y)),Colunas_Maiores),max(Y-Coluna_og)),C_M),
@@ -67,7 +67,9 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
     writeln(Vizinhas).
     
 
-
+length(Lista_de_valores,0) ,%(se comprimento for 0)
+%usar so o valor
+%se nao: usar max_list() ou min_list se nao o objetivo falha
 
 
     
@@ -93,6 +95,9 @@ estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
 
 
 % 2.5 posicoes_entre(Pos1, Pos2, Posicoes):
+posicoes_entre((X1,Y2),(X2,Y2),Posicoes) :- 
+    X1 =:= X2; Y1=:=Y2,
+    setoff(Pos)
 
 % 2.6 cria_ponte(Pos1, Pos2, Ponte):
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz):
