@@ -1,6 +1,6 @@
 %:- [codigo_comum, puzzles_publicos].
 
-N
+
 % 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE, mooshak approved
 
 extrai_ilhas_linha(N_L, Linha, Ilhas) :- extrai_ilhas_linha(N_L, Linha, 1, Ilhas).
@@ -26,28 +26,49 @@ ilhas([A|B], Cont_linhas, [Y|X]):-
     ilhas(B, Cont_linhas1,X).
 
 % 2.3 vizinhas(Ilhas, Ilha, Vizinhas):
-vizinhas(Ilhas,Ilha,Vizinhas) :- vizinhas(Ilhas,Ilha,Vizinhas,Aux_coluna,Aux_linha).
-vizinhas([],_,[],_).
-vizinhas ([ilha(_,(Linha_o,Coluna_o))|B],ilha(_,(Linha,Coluna)),_,_,[[ilha(_,(Linha_o,Coluna_o))|X]) :-
-    Linha_o=:=Linha,
-    vizinhas(B,ilha(_,(Linha,Coluna)),_,_,X).
-vizinhas ([ilha(_,(Linha_o,Coluna_o))|B],ilha(_,(Linha,Coluna)),_,[[ilha(_,(Linha_o,Coluna_o))|X],_) :-
-    Coluna_o=:=Coluna,
-    vizinhas(B,ilha(_,(Linha,Coluna)),_,X,_).
+% vizinhas(Ilhas,Ilha,Vizinhas) :- vizinhas(Ilhas,Ilha,Vizinhas,Aux_coluna,Aux_linha).
+% vizinhas([],_,[],_).
+% vizinhas ([ilha(_,(Linha_o,Coluna_o))|B],ilha(_,(Linha,Coluna)),_,_,[[ilha(_,(Linha_o,Coluna_o))|X]) :-
+%     Linha_o=:=Linha,
+%     vizinhas(B,ilha(_,(Linha,Coluna)),_,_,X).
+% vizinhas ([ilha(_,(Linha_o,Coluna_o))|B],ilha(_,(Linha,Coluna)),_,[[ilha(_,(Linha_o,Coluna_o))|X],_) :-
+%     Coluna_o=:=Coluna,
+%     vizinhas(B,ilha(_,(Linha,Coluna)),_,X,_).
 
 %new try with built in
-vizinhas(Ilhas,ilha(_,(Linha_og, Coluna_og)),Vizinhas,Linha,Coluna) :- 
-    findall(ilha(N_l,(Linha, Coluna)),(member(ilha(N_l,(Linha, Coluna)),Ilhas),Linha=:=Linha_og,Coluna\=Coluna_og),Lst_linhas),
-    findall(ilha(N_l,(Linha, Coluna)),(member(ilha(N_l,(Linha, Coluna)),Ilhas),Coluna=:=Coluna_og,Linha\=Linha_og),Lst_colunas),
-    writeln(Lst_linhas),
-    writeln(Lst_colunas).
-
-:- Ilhas = [ilha(1,(1,1)),ilha(4,(1,3)),ilha(1,(1,5)),ilha(2,(3,3))], vizinhas(Ilhas, ilha(4, (1, 3)), Vizinhas), writeln(Vizinhas); writeln(false). 
-% output: [ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))]
-
-
-
+vizinhas(Ilhas,Ilha,Vizinhas) :- 
+    % findall(Ilha,(Ilha=ilha(_,(Linha, Coluna)),member(Ilha,Ilhas),Linha=:=Linha_og,Coluna>Coluna_og,),Colunas_Maiores),
+    % %Mesma Linha Colunas maiores ou seja terá de ser o mini da diferença
+    % findall(Ilha,(Ilha=ilha(_,(Linha, Coluna)),member(Ilha,Ilhas),Linha=:=Linha_og,Coluna<Coluna_og,),Colunas_Menores),
+    % %Mesma Linha Colunas menores ou seja  terá de ser o máx de diferença
+    % findall(Ilha,(Ilha=ilha(_,(Linha, Coluna)),member(Ilha,Ilhas),Coluna=:=Coluna_og,Linha>Linha_og),Linhas_Maiores),
+    % %Mesma Coluna, Linhas maiores ou seja terá de ser o min de diferença
+    % findall(Ilha,(Ilha=ilha(_,(Linha, Coluna)),member(Ilha,Ilhas),Coluna=:=Coluna_og,Linha<Linha_og),Linhas_Menores),
+    %Mesma Coluna , Linhas Menores ou seja terá de ser o maior de diferneça
+    Ilha = ilha(N_L,(Linha_og,Coluna_og)),
+    writeln(Linha_og),
+    writeln(Coluna_og),
+    findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Linha=:=Linha_og,Coluna>Coluna_og),Colunas_Maiores),
+    %Mesma Linha Colunas maiores ou seja terá de ser o mini da diferença
+    findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Linha=:=Linha_og,Coluna<Coluna_og),Colunas_Menores),
+    %Mesma Linha Colunas menores ou seja  terá de ser o máx de diferença
+    findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Coluna=:=Coluna_og,Linha>Linha_og),Linhas_Maiores),
+    %Mesma Coluna, Linhas maiores ou seja terá de ser o min de diferença
+    findall(ilha(N_L,(Linha, Coluna)),(member(ilha(N_L,(Linha, Coluna)),Ilhas),Coluna=:=Coluna_og,Linha<Linha_og),Linhas_Menores),
+    %Mesma Coluna , Linhas Menores ou seja terá de ser o maior de diferença
     
+    
+    findall(ilha(N_L,(X,Y)),(member(ilha(N_L,(X,Y)),Colunas_Maiores),max(Y-Coluna_og)),C_M),
+    findall(ilha(N_L,(X,Y)),(member(ilha(N_L,(X,Y)),Colunas_Menores),min(Y-Coluna_og)),C_m),
+    findall(ilha(N_L,(X,Y)),(member(ilha(N_L,(X,Y)),Linhas_Maiores),max(X-Linha_og)),L_M),
+    findall(ilha(N_L,(X,Y)),(member(ilha(N_L,(X,Y)),Linhas_Menores),min(X-Linha_og)),L_m),
+
+    append([C_M,C_m,L_m,L_M],Vizinhas),
+    writeln(Vizinhas).
+    
+
+
+
 
     
 
@@ -62,7 +83,7 @@ vizinhas(Ilhas,ilha(_,(Linha_og, Coluna_og)),Vizinhas,Linha,Coluna) :-
 % 2.4 estado(Ilhas, Estado): cant test bc vizinhas isnt defined
 estado(Ilhas,Estado) :- 
     Ilhas = [Ilha | _],
-    findall([X], member(X,Ilhas), Estado)
+    findall([X], member(X,Ilhas), Estado),
     estado(Ilhas, Ilha, Estado).
 estado([],_,[]).
 estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
