@@ -98,7 +98,7 @@ estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
 posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
     Max is max(Y1,Y2) - 1,
     Min is min(Y1,Y2) + 1,
-    findall((X1,Y),between(Min,Max,Y),Posicoes).
+    findall((X1,Y),between(Min,Max,Y),Posicoes),!.
 posicoes_entre((X1,Y1),(X2,Y1),Posicoes) :- 
     Max is max(X1,X2) - 1,
     Min is min(X1,X2) + 1,
@@ -106,6 +106,18 @@ posicoes_entre((X1,Y1),(X2,Y1),Posicoes) :-
 
 
 % 2.6 cria_ponte(Pos1, Pos2, Ponte):
+cria_ponte((X1,Y1),(X1,Y2),Ponte) :-
+    Y1 > Y2,
+    Ponte = ponte((X1,Y2),(X1,Y1)),!;
+    Y1 < Y2,
+    Ponte = ponte((X1,Y1),(X1,Y2)),!.
+cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
+    X1 > X2,
+    Ponte = ponte((X2,Y1),(X1,Y1)),!;
+    X1 < X2,
+    Ponte = ponte((X1,Y1),(X2,Y1)).
+
+
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz):
 % 2.8 actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada):
 % 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado):
