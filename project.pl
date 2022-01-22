@@ -67,7 +67,7 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
     writeln(Vizinhas).
     
 
-length(Lista_de_valores,0) ,%(se comprimento for 0)
+%length(Lista_de_valores,0) ,%(se comprimento for 0)
 %usar so o valor
 %se nao: usar max_list() ou min_list se nao o objetivo falha
 
@@ -94,10 +94,16 @@ estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
 
 
 
-% 2.5 posicoes_entre(Pos1, Pos2, Posicoes):
-posicoes_entre((X1,Y2),(X2,Y2),Posicoes) :- 
-    X1 =:= X2; Y1=:=Y2,
-    setoff(Pos)
+% 2.5 posicoes_entre(Pos1, Pos2, Posicoes): DONEEEE 
+posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
+    Max is max(Y1,Y2) - 1,
+    Min is min(Y1,Y2) + 1,
+    findall((X1,Y),between(Min,Max,Y),Posicoes).
+posicoes_entre((X1,Y1),(X2,Y1),Posicoes) :- 
+    Max is max(X1,X2) - 1,
+    Min is min(X1,X2) + 1,
+    findall((X,Y1),between(Min,Max,X),Posicoes).
+
 
 % 2.6 cria_ponte(Pos1, Pos2, Ponte):
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz):
