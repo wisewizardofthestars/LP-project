@@ -1,5 +1,3 @@
-%:- [codigo_comum, puzzles_publicos].
-
 
 % 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE, mooshak approved (1)
 
@@ -25,7 +23,7 @@ ilhas([A|B], Cont_linhas, [Y|X]):-
     extrai_ilhas_linha(Cont_linhas1, A, Y),
     ilhas(B, Cont_linhas1,X).
 
-% 2.3 vizinhas(Ilhas, Ilha, Vizinhas): (2)
+% 2.3 vizinhas(Ilhas, Ilha, Vizinhas): (2) Done mooshak
 
 vizinhas(Ilhas,Ilha,Vizinhas) :- 
     Ilha = ilha(_,(Linha_og,Coluna_og)),
@@ -48,7 +46,6 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
 
 
 
-
     
 
     
@@ -66,20 +63,23 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
 %     vizinhas(Ilhas,A,Y),
 %     estado(Ilhas,B,Res).
 
-%estado(Ilhas,Estado) :- estado(Ilhas,Estado,[]).
-estado(Ilhas,[[Ilha,Vizinhas,[]]|Res]) :-
-    Ilhas = [Ilha|B],
-
+estado(Ilhas,Estado) :- estado(Ilhas,Estado,Ilhas).
+estado([Ilha|B],[[Ilha,Vizinhas,[]]|Res],Ilhas) :-
+    %nth0(Cont,Ilhas,The_Ilha),
+    %writeln(The_Ilha),
+    %Cont1 is Cont + 1,
     vizinhas(Ilhas, Ilha,Vizinhas),
-    estado(B,Res).
-estado([],[]).
+    estado(B,Res,Ilhas).
+estado([],[],_).
+
+% :- Ilhas = [ilha(2,(1,3)),ilha(1,(3,1)),ilha(6,(3,3)),ilha(1,(3,5)),ilha(2,(5,3))], estado(Ilhas, Estado), writeln(Estado); writeln(false).  
+% % output: [[ilha(2,(1,3)),[ilha(6,(3,3))],[]],[ilha(1,(3,1)),[ilha(6,(3,3))],[]],[ilha(6,(3,3)),[ilha(2,(1,3)),ilha(1,(3,1)),ilha(1,(3,5)),ilha(2,(5,3))],[]],[ilha(1,(3,5)),[ilha(6,(3,3))],[]],[ilha(2,(5,3)),[ilha(6,(3,3))],[]]]
+% :- Ilhas = [ilha(1,(1,1)),ilha(4,(1,3)),ilha(1,(1,5)),ilha(2,(3,3))], estado(Ilhas, Estado), writeln(Estado); writeln(false). 
+% % output: [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]]
+% :- Ilhas = [ilha(4,(1,2)),ilha(3,(1,10)),ilha(3,(2,3)),ilha(3,(2,7)),ilha(1,(2,9)),ilha(2,(3,2)),ilha(3,(4,1)),ilha(4,(4,3)),ilha(4,(4,10)),ilha(1,(5,7)),ilha(1,(6,4)),ilha(3,(7,1)),ilha(3,(8,4)),ilha(5,(8,7)),ilha(4,(8,10)),ilha(2,(10,1)),ilha(4,(10,3)),ilha(2,(10,5)),ilha(1,(10,7)),ilha(1,(10,10))], estado(Ilhas, Estado), writeln(Estado); writeln(false).  
+% % output: [[ilha(4,(1,2)),[ilha(3,(1,10)),ilha(2,(3,2))],[]],[ilha(3,(1,10)),[ilha(4,(1,2)),ilha(4,(4,10))],[]],[ilha(3,(2,3)),[ilha(3,(2,7)),ilha(4,(4,3))],[]],[ilha(3,(2,7)),[ilha(3,(2,3)),ilha(1,(2,9)),ilha(1,(5,7))],[]],[ilha(1,(2,9)),[ilha(3,(2,7))],[]],[ilha(2,(3,2)),[ilha(4,(1,2))],[]],[ilha(3,(4,1)),[ilha(4,(4,3)),ilha(3,(7,1))],[]],[ilha(4,(4,3)),[ilha(3,(2,3)),ilha(3,(4,1)),ilha(4,(4,10)),ilha(4,(10,3))],[]],[ilha(4,(4,10)),[ilha(3,(1,10)),ilha(4,(4,3)),ilha(4,(8,10))],[]],[ilha(1,(5,7)),[ilha(3,(2,7)),ilha(5,(8,7))],[]],[ilha(1,(6,4)),[ilha(3,(8,4))],[]],[ilha(3,(7,1)),[ilha(3,(4,1)),ilha(2,(10,1))],[]],[ilha(3,(8,4)),[ilha(1,(6,4)),ilha(5,(8,7))],[]],[ilha(5,(8,7)),[ilha(1,(5,7)),ilha(3,(8,4)),ilha(4,(8,10)),ilha(1,(10,7))],[]],[ilha(4,(8,10)),[ilha(4,(4,10)),ilha(5,(8,7)),ilha(1,(10,10))],[]],[ilha(2,(10,1)),[ilha(3,(7,1)),ilha(4,(10,3))],[]],[ilha(4,(10,3)),[ilha(4,(4,3)),ilha(2,(10,1)),ilha(2,(10,5))],[]],[ilha(2,(10,5)),[ilha(4,(10,3)),ilha(1,(10,7))],[]],[ilha(1,(10,7)),[ilha(5,(8,7)),ilha(2,(10,5)),ilha(1,(10,10))],[]],[ilha(1,(10,10)),[ilha(4,(8,10)),ilha(1,(10,7))],[]]]
 
 
-
-
-
-%:- Ilhas = [ilha(1,(1,1)),ilha(4,(1,3)),ilha(1,(1,5)),ilha(2,(3,3))], estado(Ilhas, Estado), writeln(Estado); writeln(false). 
-% output: [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]]
 
 % 2.5 posicoes_entre(Pos1, Pos2, Posicoes): DONEEEE mooshak done (1)
 posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
@@ -107,18 +107,15 @@ cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
 %idk which form is the best ,hummm i like the first one better but the other
 % %has more abstracao 
 
-% cria_ponte((X1,Y1),(X1,Y2),Ponte) :-
+% cria_ponte((X1,Y1),(X1,Y2),ponte((X1,Y_f),(X2,Y_l))) :-
 %     min(Y1,Y2,Y_f),
-%     max(Y1,Y2,Y_l),
-%     cria_ponte_aux(X1,Y_f,X1,Y_l,Ponte).
+%     max(Y1,Y2,Y_l).
 
-% cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
+% cria_ponte((X1,Y1),(X2,Y1),ponte((X_f,Y1),(X_l,Y2))) :-
 %     min(X1,X2,X_f),
-%     max(X1,X2,X_l),
-%     cria_ponte_aux(X_f,Y1,X_l,Y1,Ponte). 
+%     max(X1,X2,X_l).
 
-% cria_ponte_aux(Ax,Ay,Bx,By,Ponte) :-
-%     Ponte = ponte((Ax,Ay),(Bx,By)).
+
 
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz): (1)
 % caminho_livre(Pos1,Pos2,Posicoes,I,Vz) :-
