@@ -1,6 +1,8 @@
 
 % 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE, mooshak approved (1)
 
+lenght(Lst,N) :- length(Lst,N).
+
 extrai_ilhas_linha(N_L, Linha, Ilhas) :- extrai_ilhas_linha(N_L, Linha, 1, Ilhas).
 extrai_ilhas_linha(_,[],_,[]).
 extrai_ilhas_linha(N_L,[A|B],Cont,[ilha(A,(N_L,Cont))|Res]) :-
@@ -44,30 +46,10 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
     append([L_m,C_m,C_M,L_M],Vizinhas).
 
 
-
-
-    
-
-    
-    
-    
-    
-
-% 2.4 estado(Ilhas, Estado): cant test bc vizinhas isnt defined (1)
-% estado(Ilhas,Estado) :- 
-%     Ilhas = [Ilha | _],
-%     findall([X], member(X,Ilhas), Estado),
-%     estado(Ilhas, Ilha, Estado).
-% estado([],_,[]).
-% estado(Ilhas,[A|B],[[A,Y|[]]|Res]) :-
-%     vizinhas(Ilhas,A,Y),
-%     estado(Ilhas,B,Res).
+% 2.4 estado(Ilhas, Estado):  (1) DONE MOOSHAK
 
 estado(Ilhas,Estado) :- estado(Ilhas,Estado,Ilhas).
 estado([Ilha|B],[[Ilha,Vizinhas,[]]|Res],Ilhas) :-
-    %nth0(Cont,Ilhas,The_Ilha),
-    %writeln(The_Ilha),
-    %Cont1 is Cont + 1,
     vizinhas(Ilhas, Ilha,Vizinhas),
     estado(B,Res,Ilhas).
 estado([],[],_).
@@ -117,15 +99,26 @@ cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
 
 
 
-% 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz): (1)
-% caminho_livre(Pos1,Pos2,Posicoes,I,Vz) :-
-%     posicoes_entre(Pos1,Pos2,Posicoes),
-%     length(Posicoes,L_og),
-%     exclude(Vz,Posicoes).
-
-
+% 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz): (1) DONE MOOSHAK
+caminho_livre(Pos1,Pos2,_,ilha(_,(X1,Y1)),ilha(_,(X2,Y2))) :-
+    Pos1 == (X1,Y1),
+    Pos2 == (X2,Y2),!.
+    %se pos1 e pos2 forem as posicoes das ilhas a serem avaliadas entao 
+    %nao vao deixar de ser vizinhas
+caminho_livre(_,_,Posicoes,ilha(_,(X1,Y1)),ilha(_,(X2,Y2))) :-
+    posicoes_entre((X1,Y1),(X2,Y2),Pos_new),
+    %Lista de posicoes entre a ilha e a sua vizinha
+    %ponte que tem posicao final posicao inicial
+    %lista de posicoes que a ponte ocupa
+    %se a lista de posicoes entre I e Viz intersetar com a 
+    %lista de posicoes da ponte entao viz e I passam a nao ser vizinhas
+    findall((A,B),(member((A,B),Pos_new), member((A,B),Posicoes)),Lst),
+    length(Lst,0).
 
 % 2.8 actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada): (1)
+%actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada) :-
+
+
 % 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado):
 %actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
 
