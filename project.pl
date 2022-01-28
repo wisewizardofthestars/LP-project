@@ -54,14 +54,6 @@ estado([Ilha|B],[[Ilha,Vizinhas,[]]|Res],Ilhas) :-
     estado(B,Res,Ilhas).
 estado([],[],_).
 
-% :- Ilhas = [ilha(2,(1,3)),ilha(1,(3,1)),ilha(6,(3,3)),ilha(1,(3,5)),ilha(2,(5,3))], estado(Ilhas, Estado), writeln(Estado); writeln(false).  
-% % output: [[ilha(2,(1,3)),[ilha(6,(3,3))],[]],[ilha(1,(3,1)),[ilha(6,(3,3))],[]],[ilha(6,(3,3)),[ilha(2,(1,3)),ilha(1,(3,1)),ilha(1,(3,5)),ilha(2,(5,3))],[]],[ilha(1,(3,5)),[ilha(6,(3,3))],[]],[ilha(2,(5,3)),[ilha(6,(3,3))],[]]]
-% :- Ilhas = [ilha(1,(1,1)),ilha(4,(1,3)),ilha(1,(1,5)),ilha(2,(3,3))], estado(Ilhas, Estado), writeln(Estado); writeln(false). 
-% % output: [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]]
-% :- Ilhas = [ilha(4,(1,2)),ilha(3,(1,10)),ilha(3,(2,3)),ilha(3,(2,7)),ilha(1,(2,9)),ilha(2,(3,2)),ilha(3,(4,1)),ilha(4,(4,3)),ilha(4,(4,10)),ilha(1,(5,7)),ilha(1,(6,4)),ilha(3,(7,1)),ilha(3,(8,4)),ilha(5,(8,7)),ilha(4,(8,10)),ilha(2,(10,1)),ilha(4,(10,3)),ilha(2,(10,5)),ilha(1,(10,7)),ilha(1,(10,10))], estado(Ilhas, Estado), writeln(Estado); writeln(false).  
-% % output: [[ilha(4,(1,2)),[ilha(3,(1,10)),ilha(2,(3,2))],[]],[ilha(3,(1,10)),[ilha(4,(1,2)),ilha(4,(4,10))],[]],[ilha(3,(2,3)),[ilha(3,(2,7)),ilha(4,(4,3))],[]],[ilha(3,(2,7)),[ilha(3,(2,3)),ilha(1,(2,9)),ilha(1,(5,7))],[]],[ilha(1,(2,9)),[ilha(3,(2,7))],[]],[ilha(2,(3,2)),[ilha(4,(1,2))],[]],[ilha(3,(4,1)),[ilha(4,(4,3)),ilha(3,(7,1))],[]],[ilha(4,(4,3)),[ilha(3,(2,3)),ilha(3,(4,1)),ilha(4,(4,10)),ilha(4,(10,3))],[]],[ilha(4,(4,10)),[ilha(3,(1,10)),ilha(4,(4,3)),ilha(4,(8,10))],[]],[ilha(1,(5,7)),[ilha(3,(2,7)),ilha(5,(8,7))],[]],[ilha(1,(6,4)),[ilha(3,(8,4))],[]],[ilha(3,(7,1)),[ilha(3,(4,1)),ilha(2,(10,1))],[]],[ilha(3,(8,4)),[ilha(1,(6,4)),ilha(5,(8,7))],[]],[ilha(5,(8,7)),[ilha(1,(5,7)),ilha(3,(8,4)),ilha(4,(8,10)),ilha(1,(10,7))],[]],[ilha(4,(8,10)),[ilha(4,(4,10)),ilha(5,(8,7)),ilha(1,(10,10))],[]],[ilha(2,(10,1)),[ilha(3,(7,1)),ilha(4,(10,3))],[]],[ilha(4,(10,3)),[ilha(4,(4,3)),ilha(2,(10,1)),ilha(2,(10,5))],[]],[ilha(2,(10,5)),[ilha(4,(10,3)),ilha(1,(10,7))],[]],[ilha(1,(10,7)),[ilha(5,(8,7)),ilha(2,(10,5)),ilha(1,(10,10))],[]],[ilha(1,(10,10)),[ilha(4,(8,10)),ilha(1,(10,7))],[]]]
-
-
 
 % 2.5 posicoes_entre(Pos1, Pos2, Posicoes): DONEEEE mooshak done (1)
 posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
@@ -116,8 +108,10 @@ caminho_livre(_,_,Posicoes,ilha(_,(X1,Y1)),ilha(_,(X2,Y2))) :-
     length(Lst,0).
 
 % 2.8 actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada): (1)
-%actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada) :-
-
+actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,[Ilha,Vizinhas|B],[Ilha,Aux|B]) :-
+    posicoes_entre(Pos1,Pos2,Posicoes),
+    include(caminho_livre(Pos1,Pos2,Posicoes,Ilha),Vizinhas,Aux).
+    
 
 % 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado):
 %actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
