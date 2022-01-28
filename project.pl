@@ -143,6 +143,12 @@ tira_ilhas_terminadas_entrada(Ilhas_term, [Ilha,Viz_og,Pontes], [Ilha,Viz_new,Po
     findall(Ilhas, (member(Ilhas,Viz_og),\+(member(Ilhas,Ilhas_term))),Viz_new).
 
 % 2.12 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado): (1)
+tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
+    maplist(tira_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
+
+%:- Estado = [[ilha(2,(1,1)),[ilha(4,(4,1))],[]],[ilha(2,(2,3)),[ilha(4,(2,5)),ilha(3,(4,3))],[]],[ilha(4,(2,5)),[ilha(2,(2,3)),ilha(2,(2,7)),ilha(4,(7,5))],[]],[ilha(2,(2,7)),[ilha(4,(2,5)),ilha(1,(5,7))],[]],[ilha(4,(4,1)),[ilha(2,(1,1)),ilha(3,(4,3))],[]],[ilha(3,(4,3)),[ilha(2,(2,3)),ilha(4,(4,1))],[]],[ilha(3,(5,2)),[ilha(2,(5,4)),ilha(2,(7,2))],[]],[ilha(2,(5,4)),[ilha(3,(5,2)),ilha(1,(5,7))],[]],[ilha(1,(5,7)),[ilha(2,(2,7)),ilha(2,(5,4)),ilha(1,(7,7))],[]],[ilha(2,(7,2)),[ilha(3,(5,2)),ilha(4,(7,5))],[]],[ilha(4,(7,5)),[ilha(4,(2,5)),ilha(2,(7,2)),ilha(1,(7,7))],[]],[ilha(1,(7,7)),[ilha(1,(5,7)),ilha(4,(7,5))],[]]], IlhasTerm = [ilha(2,(1,1)), ilha(2,(2,3))], tira_ilhas_terminadas(Estado, IlhasTerm, NovoEstado), writeln(NovoEstado); writeln(false). 
+% output: [[ilha(2,(1,1)),[ilha(4,(4,1))],[]],[ilha(2,(2,3)),[ilha(4,(2,5)),ilha(3,(4,3))],[]],[ilha(4,(2,5)),[ilha(2,(2,7)),ilha(4,(7,5))],[]],[ilha(2,(2,7)),[ilha(4,(2,5)),ilha(1,(5,7))],[]],[ilha(4,(4,1)),[ilha(3,(4,3))],[]],[ilha(3,(4,3)),[ilha(4,(4,1))],[]],[ilha(3,(5,2)),[ilha(2,(5,4)),ilha(2,(7,2))],[]],[ilha(2,(5,4)),[ilha(3,(5,2)),ilha(1,(5,7))],[]],[ilha(1,(5,7)),[ilha(2,(2,7)),ilha(2,(5,4)),ilha(1,(7,7))],[]],[ilha(2,(7,2)),[ilha(3,(5,2)),ilha(4,(7,5))],[]],[ilha(4,(7,5)),[ilha(4,(2,5)),ilha(2,(7,2)),ilha(1,(7,7))],[]],[ilha(1,(7,7)),[ilha(1,(5,7)),ilha(4,(7,5))],[]]]
+
 % 2.13 marca_ilhas_terminadas_entrada(Ilhas_term, Entrada,Nova_entrada):(1)
 % 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):(1)
 % 2.15 trata_ilhas_terminadas(Estado, Novo_estado):(1)
