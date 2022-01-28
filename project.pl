@@ -151,9 +151,10 @@ marca_ilhas_terminadas_entrada(Ilhas_term, [ilha(N_L,A),Vizinhas,Pontes],[ilha('
     member(ilha(N_L,A),Ilhas_term),!.
 marca_ilhas_terminadas_entrada(_,Entrada,Entrada).
 
-
-
 % 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):(1)
+marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
+    maplist(marca_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
+
 % 2.15 trata_ilhas_terminadas(Estado, Novo_estado):(1)
 % 2.16 junta_pontes(Estado, Num_pontes, Ilha1, Ilha2, Novo_estado):(1)
 
