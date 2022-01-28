@@ -92,9 +92,8 @@ cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
 
 
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz): (1) DONE MOOSHAK
-caminho_livre(Pos1,Pos2,_,ilha(_,(X1,Y1)),ilha(_,(X2,Y2))) :-
-    Pos1 == (X1,Y1),
-    Pos2 == (X2,Y2),!.
+caminho_livre(Pos1,Pos2,_,ilha(_,Pos1),ilha(_,Pos2)) :- !.
+caminho_livre(Pos1,Pos2,_,ilha(_,Pos2),ilha(_,Pos1)) :- !.
     %se pos1 e pos2 forem as posicoes das ilhas a serem avaliadas entao 
     %nao vao deixar de ser vizinhas
 caminho_livre(_,_,Posicoes,ilha(_,(X1,Y1)),ilha(_,(X2,Y2))) :-
@@ -114,14 +113,10 @@ actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,[Ilha,Vizinhas|B],[Ilha,Aux|B]) :-
     
 
 % 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado): (0.5) humm standby
-% actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
-%     posicoes_entre(Pos1,Pos2,Posicoes),
-%     findall(X, (member(Y,Estado),actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,Y,X)),Novo_Estado),
-%     writeln(Novo_Estado).
-
-%:- Estado = [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]], actualiza_vizinhas_apos_pontes(Estado, (1, 3), (3, 3), NovoEstado), writeln(NovoEstado); writeln(false). 
-% output: [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]]
-
+actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
+    posicoes_entre(Pos1,Pos2,Posicoes),
+    maplist(actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes),Estado,Novo_estado).
+    %findall(X, (member(Y,Estado),actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,Y,X),writeln(X)),Novo_Estado).
 
 % 2.10 ilhas_terminadas(Estado, Ilhas_term): (1) DONE Mooshak approved
 ilhas_terminadas([],[]) :- !.
@@ -161,6 +156,10 @@ trata_ilhas_terminadas(Estado, Novo_estado) :-
     tira_ilhas_terminadas(Estado,Ilhas_term,Aux),
     marca_ilhas_terminadas(Aux,Ilhas_term,Novo_estado).
 
-
 % 2.16 junta_pontes(Estado, Num_pontes, Ilha1, Ilha2, Novo_estado):(1)
+% junta_pontes(Estado, Num_pontes, ilha(N1,(X1,Y1)), ilha(N2,(X2,Y2)), Novo_estado) :-
+%     cria_ponte((X1,Y1),(X2,Y2),Ponte),
+
+
+% junta_pontes_aux(Estado)
 
