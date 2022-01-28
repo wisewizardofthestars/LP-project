@@ -113,8 +113,14 @@ actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,[Ilha,Vizinhas|B],[Ilha,Aux|B]) :-
     include(caminho_livre(Pos1,Pos2,Posicoes,Ilha),Vizinhas,Aux).
     
 
-% 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado):
-%actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
+% 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado): (0.5) humm standby
+% actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
+%     posicoes_entre(Pos1,Pos2,Posicoes),
+%     findall(X, (member(Y,Estado),actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,Y,X)),Novo_Estado),
+%     writeln(Novo_Estado).
+
+%:- Estado = [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]], actualiza_vizinhas_apos_pontes(Estado, (1, 3), (3, 3), NovoEstado), writeln(NovoEstado); writeln(false). 
+% output: [[ilha(1,(1,1)),[ilha(4,(1,3))],[]],[ilha(4,(1,3)),[ilha(1,(1,1)),ilha(1,(1,5)),ilha(2,(3,3))],[]],[ilha(1,(1,5)),[ilha(4,(1,3))],[]],[ilha(2,(3,3)),[ilha(4,(1,3))],[]]]
 
 
 % 2.10 ilhas_terminadas(Estado, Ilhas_term): (1) DONE Mooshak approved
@@ -133,6 +139,8 @@ ilhas_terminadas_aux([ilha(N,Pos),_,B],ilha(N,Pos)) :-
 
 
 % 2.11 tira_ilhas_terminadas_entrada(Ilhas_term, Entrada, Nova_entrada): (1)
+tira_ilhas_terminadas_entrada(Ilhas_term, [Ilha,Viz_og,Pontes], [Ilha,Viz_new,Pontes]):-
+    findall(Ilhas, (member(Ilhas,Viz_og),\+(member(Ilhas,Ilhas_term))),Viz_new).
 
 % 2.12 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado): (1)
 % 2.13 marca_ilhas_terminadas_entrada(Ilhas_term, Entrada,Nova_entrada):(1)
