@@ -1,5 +1,11 @@
+% ist1102507    %
+% Sara Pinheiro %
+% LP 2021/2022  %
 
-% 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : DONE, mooshak approved (1)
+% Solucionador de Puzzles Hashi (Parte 1)
+
+
+% 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : 
 
 lenght(Lst,N) :- length(Lst,N).
 
@@ -15,7 +21,7 @@ extrai_ilhas_linha(N_L,[A|B],Cont,Res) :-
      Cont1 is Cont + 1,
      extrai_ilhas_linha(N_L,B,Cont1,Res).
 
-% 2.2 ilhas(Puz, Ilhas) : DONE, mooshak approved (1)
+% 2.2 ilhas(Puz, Ilhas) : 
 
 ilhas(Puz, IlhasF) :- ilhas(Puz,0,Ilhas),
     append(Ilhas,IlhasF).
@@ -25,7 +31,7 @@ ilhas([A|B], Cont_linhas, [Y|X]):-
     extrai_ilhas_linha(Cont_linhas1, A, Y),
     ilhas(B, Cont_linhas1,X).
 
-% 2.3 vizinhas(Ilhas, Ilha, Vizinhas): (2) Done mooshak
+% 2.3 vizinhas(Ilhas, Ilha, Vizinhas): 
 
 vizinhas(Ilhas,Ilha,Vizinhas) :- 
     Ilha = ilha(_,(Linha_og,Coluna_og)),
@@ -46,7 +52,7 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
     append([L_m,C_m,C_M,L_M],Vizinhas).
 
 
-% 2.4 estado(Ilhas, Estado):  (1) DONE MOOSHAK
+% 2.4 estado(Ilhas, Estado):  
 
 estado(Ilhas,Estado) :- estado(Ilhas,Estado,Ilhas).
 estado([Ilha|B],[[Ilha,Vizinhas,[]]|Res],Ilhas) :-
@@ -55,7 +61,7 @@ estado([Ilha|B],[[Ilha,Vizinhas,[]]|Res],Ilhas) :-
 estado([],[],_).
 
 
-% 2.5 posicoes_entre(Pos1, Pos2, Posicoes): DONEEEE mooshak done (1)
+% 2.5 posicoes_entre(Pos1, Pos2, Posicoes): 
 posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
     Max is max(Y1,Y2) - 1,
     Min is min(Y1,Y2) + 1,
@@ -66,7 +72,7 @@ posicoes_entre((X1,Y1),(X2,Y1),Posicoes) :-
     findall((X,Y1),between(Min,Max,X),Posicoes).
 
 
-% 2.6 cria_ponte(Pos1, Pos2, Ponte):  DONE mooshak approved i think(0.5)
+% 2.6 cria_ponte(Pos1, Pos2, Ponte):  
 cria_ponte((X1,Y1),(X1,Y2),Ponte) :-
     Y1 > Y2,
     Ponte = ponte((X1,Y2),(X1,Y1)),!;
@@ -78,20 +84,10 @@ cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
     X1 < X2,
     Ponte = ponte((X1,Y1),(X2,Y1)).
 
-%idk which form is the best ,hummm i like the first one better but the other
-% %has more abstracao 
-
-% cria_ponte((X1,Y1),(X1,Y2),ponte((X1,Y_f),(X2,Y_l))) :-
-%     min(Y1,Y2,Y_f),
-%     max(Y1,Y2,Y_l).
-
-% cria_ponte((X1,Y1),(X2,Y1),ponte((X_f,Y1),(X_l,Y2))) :-
-%     min(X1,X2,X_f),
-%     max(X1,X2,X_l).
 
 
 
-% 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz): (1) DONE MOOSHAK
+% 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz):
 caminho_livre(Pos1,Pos2,_,ilha(_,Pos1),ilha(_,Pos2)) :- !.
 caminho_livre(Pos1,Pos2,_,ilha(_,Pos2),ilha(_,Pos1)) :- !.
     %se pos1 e pos2 forem as posicoes das ilhas a serem avaliadas entao 
@@ -157,39 +153,32 @@ trata_ilhas_terminadas(Estado, Novo_estado) :-
     marca_ilhas_terminadas(Aux,Ilhas_term,Novo_estado).
 
 % 2.16 junta_pontes(Estado, Num_pontes, Ilha1, Ilha2, Novo_estado):(1)
-junta_pontes(Estado, Num_pontes, ilha(N1,(X1,Y1)), ilha(N2,(X2,Y2)), Novo_estado) :-
-    junta_pontes_pontes(Estado,Num_pontes,ilha(N1,(X1,Y1)),ilha(N2,(X2,Y2)),Aux),
-    actualiza_vizinhas_apos_pontes(Aux,(X1,Y1),(X2,Y2),Aux2),
-    trata_ilhas_terminadas(Aux2,Novo_estado).
+junta_pontes(Novo,0,ilha(_,(X1,Y1)), ilha(_,(X2,Y2)),Novo_estado) :- junta_pontes_aux(Novo,(X1,Y1),(X2,Y2),Novo_estado).
+junta_pontes(Estado, Num_pontes, ilha(_,(X1,Y1)), ilha(_,(X2,Y2)), Novo_estado) :-
+    Num_pontes_new is Num_pontes - 1,
+    junta_pontes_pontes(Estado,ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Aux),
+    junta_pontes(Aux, Num_pontes_new, ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Novo_estado).
 
-junta_pontes_pontes(0,_,_,_) :- !.
-junta_pontes_pontes(Estado,Num_pontes,ilha(N1,(X1,Y1)),ilha(N2,(X2,Y2)),Novo_estado) :-
-    Num_pontes > 0,
+junta_pontes_aux(Old,(X1,Y1),(X2,Y2),New) :-
+    actualiza_vizinhas_apos_pontes(Old,(X1,Y1),(X2,Y2),Aux),
+    trata_ilhas_terminadas(Aux,New).
+
+
+junta_pontes_pontes(Estado,ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Novo_estado) :-
     cria_ponte((X1,Y1),(X2,Y2),Ponte),
-    Num_pontes1 is Num_pontes - 1,
-    junta_pontes_estado(Estado,ilha(N1,(X1,Y1)),ilha(N2,(X2,Y2)),Novo_estado,Ponte),
-    junta_pontes_pontes(Num_pontes1,(X1,Y1),(X2,Y2),Novo_estado).
+    junta_pontes_estado(Estado,ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Novo_estado,Ponte).
 
 junta_pontes_estado([],_,_,[],_) :- !. 
 
-junta_pontes_estado([[Ilha,Vizinhas,_]|B],Ilha,Ilha2,[[Ilha,Vizinhas,[Ponte]]|Res],Ponte) :-
+junta_pontes_estado([[Ilha,Vizinhas,Pontes_og]|B],Ilha,Ilha2,[[Ilha,Vizinhas,Pontes]|Res],Ponte) :-
+    append(Pontes_og,[Ponte],Pontes),
     junta_pontes_estado(B,Ilha,Ilha2,Res,Ponte).
 
-junta_pontes_estado([[Ilha,Vizinhas,_]|B],Ilha1,Ilha,[[Ilha,Vizinhas,[Ponte]]|Res],Ponte) :-
+junta_pontes_estado([[Ilha,Vizinhas,Pontes_og]|B],Ilha1,Ilha,[[Ilha,Vizinhas,Pontes]|Res],Ponte) :-
+    append(Pontes_og,[Ponte],Pontes),
     junta_pontes_estado(B,Ilha1,Ilha,Res,Ponte).
 
 junta_pontes_estado([[Ilha,Vizinhas,Pontes]|B],Ilha1,Ilha2,[[Ilha,Vizinhas,Pontes]|Res],Ponte) :-
     Ilha \= Ilha1,
     Ilha \= Ilha2,
     junta_pontes_estado(B,Ilha1,Ilha2,Res,Ponte).
-
-
-%:- Estado = [[ilha(2,(1,1)),[ilha(2,(1,3)),ilha(6,(3,1))],[]],[ilha(2,(1,3)),[ilha(2,(1,1)),ilha(5,(1,5)),ilha(3,(3,3))],[]],[ilha(5,(1,5)),[ilha(2,(1,3)),ilha(2,(1,7)),ilha(6,(4,5))],[]],[ilha(2,(1,7)),[ilha(5,(1,5)),ilha(1,(4,7))],[]],[ilha(1,(2,6)),[ilha(3,(2,8)),ilha(2,(5,6))],[]],[ilha(3,(2,8)),[ilha(1,(2,6)),ilha(6,(5,8))],[]],[ilha(6,(3,1)),[ilha(2,(1,1)),ilha(3,(3,3)),ilha(3,(5,1))],[]],[ilha(3,(3,3)),[ilha(2,(1,3)),ilha(6,(3,1)),ilha(1,(5,3))],[]],[ilha(2,(4,2)),[ilha(6,(4,5)),ilha(2,(6,2))],[]],[ilha(6,(4,5)),[ilha(5,(1,5)),ilha(2,(4,2)),ilha(1,(4,7)),ilha(5,(7,5))],[]],[ilha(1,(4,7)),[ilha(2,(1,7)),ilha(6,(4,5)),ilha(2,(8,7))],[]],[ilha(3,(5,1)),[ilha(6,(3,1)),ilha(1,(5,3)),ilha(1,(7,1))],[]],[ilha(1,(5,3)),[ilha(3,(3,3)),ilha(3,(5,1)),ilha(2,(5,6)),ilha(3,(7,3))],[]],[ilha(2,(5,6)),[ilha(1,(2,6)),ilha(1,(5,3)),ilha(6,(5,8))],[]],[ilha(6,(5,8)),[ilha(3,(2,8)),ilha(2,(5,6)),ilha(3,(7,8))],[]],[ilha(2,(6,2)),[ilha(2,(4,2)),ilha(2,(8,2))],[]],[ilha(1,(7,1)),[ilha(3,(5,1)),ilha(3,(7,3))],[]],[ilha(3,(7,3)),[ilha(1,(5,3)),ilha(1,(7,1)),ilha(5,(7,5))],[]],[ilha(5,(7,5)),[ilha(6,(4,5)),ilha(3,(7,3)),ilha(3,(7,8))],[]],[ilha(3,(7,8)),[ilha(6,(5,8)),ilha(5,(7,5))],[]],[ilha(2,(8,2)),[ilha(2,(6,2)),ilha(3,(8,4))],[]],[ilha(3,(8,4)),[ilha(2,(8,2)),ilha(2,(8,7))],[]],[ilha(2,(8,7)),[ilha(1,(4,7)),ilha(3,(8,4))],[]]], junta_pontes(Estado, 1, ilha(2,(4,2)), ilha(2,(6,2)), NovoEstado), writeln(NovoEstado); writeln(false). 
-% output: [[ilha(2,(1,1)),[ilha(2,(1,3)),ilha(6,(3,1))],[]],[ilha(2,(1,3)),[ilha(2,(1,1)),ilha(5,(1,5)),ilha(3,(3,3))],[]],[ilha(5,(1,5)),[ilha(2,(1,3)),ilha(2,(1,7)),ilha(6,(4,5))],[]],[ilha(2,(1,7)),[ilha(5,(1,5)),ilha(1,(4,7))],[]],[ilha(1,(2,6)),[ilha(3,(2,8)),ilha(2,(5,6))],[]],[ilha(3,(2,8)),[ilha(1,(2,6)),ilha(6,(5,8))],[]],[ilha(6,(3,1)),[ilha(2,(1,1)),ilha(3,(3,3)),ilha(3,(5,1))],[]],[ilha(3,(3,3)),[ilha(2,(1,3)),ilha(6,(3,1)),ilha(1,(5,3))],[]],[ilha(2,(4,2)),[ilha(6,(4,5)),ilha(2,(6,2))],[ponte((4,2),(6,2))]],[ilha(6,(4,5)),[ilha(5,(1,5)),ilha(2,(4,2)),ilha(1,(4,7)),ilha(5,(7,5))],[]],[ilha(1,(4,7)),[ilha(2,(1,7)),ilha(6,(4,5)),ilha(2,(8,7))],[]],[ilha(3,(5,1)),[ilha(6,(3,1)),ilha(1,(7,1))],[]],[ilha(1,(5,3)),[ilha(3,(3,3)),ilha(2,(5,6)),ilha(3,(7,3))],[]],[ilha(2,(5,6)),[ilha(1,(2,6)),ilha(1,(5,3)),ilha(6,(5,8))],[]],[ilha(6,(5,8)),[ilha(3,(2,8)),ilha(2,(5,6)),ilha(3,(7,8))],[]],[ilha(2,(6,2)),[ilha(2,(4,2)),ilha(2,(8,2))],[ponte((4,2),(6,2))]],[ilha(1,(7,1)),[ilha(3,(5,1)),ilha(3,(7,3))],[]],[ilha(3,(7,3)),[ilha(1,(5,3)),ilha(1,(7,1)),ilha(5,(7,5))],[]],[ilha(5,(7,5)),[ilha(6,(4,5)),ilha(3,(7,3)),ilha(3,(7,8))],[]],[ilha(3,(7,8)),[ilha(6,(5,8)),ilha(5,(7,5))],[]],[ilha(2,(8,2)),[ilha(2,(6,2)),ilha(3,(8,4))],[]],[ilha(3,(8,4)),[ilha(2,(8,2)),ilha(2,(8,7))],[]],[ilha(2,(8,7)),[ilha(1,(4,7)),ilha(3,(8,4))],[]]]
-
-:- Estado = [[ilha(2,(1,1)),[ilha(2,(1,3)),ilha(6,(3,1))],[]],[ilha(2,(4,2)),[ilha(6,(4,5)),ilha(2,(6,2))],[]],[ilha(2,(6,2)),[ilha(2,(4,2)),ilha(2,(8,2))],[]]] , junta_pontes(Estado, 1, ilha(2,(4,2)), ilha(2,(6,2)), NovoEstado), writeln(NovoEstado) .
-
-
-
-
-
