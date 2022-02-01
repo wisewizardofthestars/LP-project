@@ -158,31 +158,40 @@ trata_ilhas_terminadas(Estado, Novo_estado) :-
 
 % 2.16 junta_pontes(Estado, Num_pontes, Ilha1, Ilha2, Novo_estado):(1)
 junta_pontes(Novo,0,ilha(_,(X1,Y1)), ilha(_,(X2,Y2)),Novo_estado) :- junta_pontes_aux(Novo,(X1,Y1),(X2,Y2),Novo_estado).
+    %caso terminal que ira levar a parte final de atualizar e tratar ilhas terminadas
+
 junta_pontes(Estado, Num_pontes, ilha(_,(X1,Y1)), ilha(_,(X2,Y2)), Novo_estado) :-
+    %main function que ira servir como contadora para o nr de pontes a ser criado
     Num_pontes_new is Num_pontes - 1,
     junta_pontes_pontes(Estado,ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Aux),
     junta_pontes(Aux, Num_pontes_new, ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Novo_estado).
 
 junta_pontes_aux(Old,(X1,Y1),(X2,Y2),New) :-
+    %ultima parte, atualizar vizinhas e tartar ilhas terminadas
     actualiza_vizinhas_apos_pontes(Old,(X1,Y1),(X2,Y2),Aux),
     trata_ilhas_terminadas(Aux,New).
 
 
 junta_pontes_pontes(Estado,ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Novo_estado) :-
+    %funcao que cria as pontes e que ira direcionar para a funcao de as juntar ao estado
     cria_ponte((X1,Y1),(X2,Y2),Ponte),
     junta_pontes_estado(Estado,ilha(_,(X1,Y1)),ilha(_,(X2,Y2)),Novo_estado,Ponte).
 
-junta_pontes_estado([],_,_,[],_) :- !. 
+junta_pontes_estado([],_,_,[],_) :- !.
+%caso terminal da junta_pontes_estado
 
 junta_pontes_estado([[Ilha,Vizinhas,Pontes_og]|B],Ilha,Ilha2,[[Ilha,Vizinhas,Pontes]|Res],Ponte) :-
+    %caso a ilha a ser avaliada seja a que se tem de adicionar as pontes, isso e feito
     append(Pontes_og,[Ponte],Pontes),
     junta_pontes_estado(B,Ilha,Ilha2,Res,Ponte).
 
 junta_pontes_estado([[Ilha,Vizinhas,Pontes_og]|B],Ilha1,Ilha,[[Ilha,Vizinhas,Pontes]|Res],Ponte) :-
+    %segundo caso da ilha a ser adicionaads pontes ser esta
     append(Pontes_og,[Ponte],Pontes),
     junta_pontes_estado(B,Ilha1,Ilha,Res,Ponte).
 
 junta_pontes_estado([[Ilha,Vizinhas,Pontes]|B],Ilha1,Ilha2,[[Ilha,Vizinhas,Pontes]|Res],Ponte) :-
+    %caso seja qualquer outra ilha deve se junta ao novo estado sem alterar
     Ilha \= Ilha1,
     Ilha \= Ilha2,
     junta_pontes_estado(B,Ilha1,Ilha2,Res,Ponte).
