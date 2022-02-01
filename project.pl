@@ -7,17 +7,18 @@
 
 % 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : 
 
-lenght(Lst,N) :- length(Lst,N).
-
 extrai_ilhas_linha(N_L, Linha, Ilhas) :- extrai_ilhas_linha(N_L, Linha, 1, Ilhas).
 extrai_ilhas_linha(_,[],_,[]).
 extrai_ilhas_linha(N_L,[A|B],Cont,[ilha(A,(N_L,Cont))|Res]) :-
     A\==0,
+    %Se for diferente de 0 entao e porque e uma ilha, entao adiciona-se
     Cont1 is Cont + 1,
     extrai_ilhas_linha(N_L,B,Cont1,Res).
 
 extrai_ilhas_linha(N_L,[A|B],Cont,Res) :-
      A==0,
+     %se for igual a zero entao nao e uma ilha, 
+     %mas o contador tem de aumentar a mesma
      Cont1 is Cont + 1,
      extrai_ilhas_linha(N_L,B,Cont1,Res).
 
@@ -28,6 +29,7 @@ ilhas(Puz, IlhasF) :- ilhas(Puz,0,Ilhas),
 ilhas([],_,[]).
 ilhas([A|B], Cont_linhas, [Y|X]):-
     Cont_linhas1 is Cont_linhas + 1,
+    %contar as linhas 
     extrai_ilhas_linha(Cont_linhas1, A, Y),
     ilhas(B, Cont_linhas1,X).
 
@@ -45,7 +47,9 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
     %Mesma Coluna , Linhas Menores ou seja tera de ser o maior de diferenca
     
     ((length(Colunas_Maiores,0), C_M = []) ; (Colunas_Maiores = [C_M1 | _], C_M = [C_M1])),
+    %usar o primeiro da lista, que sera o que esta mais perto
     ((length(Colunas_Menores,0), C_m = []) ; (last(Colunas_Menores, C_m1), C_m = [C_m1])),
+    %usar o ultimo da lista que sera o que esta mais perto
     ((length(Linhas_Maiores,0), L_M = []) ; (Linhas_Maiores = [L_M1 | _], L_M = [L_M1])),
     ((length(Linhas_Menores,0), L_m = []) ; (last(Linhas_Menores, L_m1), L_m = [L_m1])),
 
