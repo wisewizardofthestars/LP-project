@@ -84,6 +84,7 @@ estado([],[],_).
 /*Pos1 e Pos2 -> posicoes
 Posicoes -> e a lista ordenada de posicoes entre Pos1 e Pos2, excluindo
 Se Pos1 e Pos2 nao pertencerem a mesma linha ou coluna deve devolver falso*/
+
 posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
     Max is max(Y1,Y2) - 1,
     Min is min(Y1,Y2) + 1,
@@ -95,6 +96,9 @@ posicoes_entre((X1,Y1),(X2,Y1),Posicoes) :-
 
 
 % 2.6 cria_ponte(Pos1, Pos2, Ponte):  
+/*Pos1 e Pos2 -> posicoes
+Ponte -> ponte entre essas duas posicoes*/
+
 cria_ponte((X1,Y1),(X1,Y2),Ponte) :-
     Y1 > Y2,
     Ponte = ponte((X1,Y2),(X1,Y1)),!;
@@ -110,6 +114,12 @@ cria_ponte((X1,Y1),(X2,Y1),Ponte) :-
 
 
 % 2.7 caminho_livre(Pos1, Pos2, Posicoes, I, Vz):
+/*Pos1 e Pos2 -> posicoes
+Posicoes -> lista ordenada de posicoes entre Pos1 e Pos 2
+I -> e uma ilha
+Vz -> e uma das vizinhas dessa ilha, ou seja, a adicao da ponte
+entre Pos1 e Pos2 nao faz com que I e Vz deixem de ser Vizinhas*/
+
 caminho_livre(Pos1,Pos2,_,ilha(_,Pos1),ilha(_,Pos2)) :- !.
 caminho_livre(Pos1,Pos2,_,ilha(_,Pos2),ilha(_,Pos1)) :- !.
     %se pos1 e pos2 forem as posicoes das ilhas a serem avaliadas entao 
