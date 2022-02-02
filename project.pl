@@ -6,6 +6,9 @@
 
 
 % 2.1 extrai_ilhas_linha(N_L, Linha, Ilhas) : 
+/*N_L -> inteiro positivo
+Linha -> e uma lista correspondente a uma linha de um puzzle
+Ilhas -> lista ordenada (esquerda para a direita) de ilhas da linha Linha*/
 
 extrai_ilhas_linha(N_L, Linha, Ilhas) :- extrai_ilhas_linha(N_L, Linha, 1, Ilhas).
 extrai_ilhas_linha(_,[],_,[]).
@@ -23,6 +26,9 @@ extrai_ilhas_linha(N_L,[A|B],Cont,Res) :-
      extrai_ilhas_linha(N_L,B,Cont1,Res).
 
 % 2.2 ilhas(Puz, Ilhas) : 
+/*Puz -> e um puzzle 
+Ilhas -> lista organizada (esquerda para direita, cima para baixo),
+cujos elementos são ilhas de Puz*/
 
 ilhas(Puz, IlhasF) :- ilhas(Puz,0,Ilhas),
     append(Ilhas,IlhasF).
