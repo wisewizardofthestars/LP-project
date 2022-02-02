@@ -134,18 +134,27 @@ caminho_livre(_,_,Posicoes,ilha(_,(X1,Y1)),ilha(_,(X2,Y2))) :-
     findall((A,B),(member((A,B),Pos_new), member((A,B),Posicoes)),Lst),
     length(Lst,0).
 
-% 2.8 actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada): (1)
+% 2.8 actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes, Entrada,Nova_Entrada): 
+/*Pos1 e Pos2 -> posicoes entre as quais vai ser adicionada uma ponte
+Posicoes -> lista ordenada de posicoes entre Pos1 e Pos2
+Entrada -> e uma entrada do estilo: Entrada : elemento 1 e uma ilha,
+    elemento 2 e uma lista de vizinhas dessa ilha,
+    elemento 3 e a lista de pontes da ilha (vazia no inicio)
+Nova_Entrada -> e igual a Entrada exepto na lista de ilhas vizinhas,
+esta deve ser atualizada, removendo as ilhas que deixam de ser vizinhas apos
+a adicao da ponte*/
+
 actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,[Ilha,Vizinhas|B],[Ilha,Aux|B]) :-
     posicoes_entre(Pos1,Pos2,Posicoes),
     include(caminho_livre(Pos1,Pos2,Posicoes,Ilha),Vizinhas,Aux).
     
 
-% 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado): (0.5) Done mooshak
+% 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado): (0.5) 
 actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
     posicoes_entre(Pos1,Pos2,Posicoes),
     maplist(actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes),Estado,Novo_estado).
 
-% 2.10 ilhas_terminadas(Estado, Ilhas_term): (1) DONE Mooshak approved
+% 2.10 ilhas_terminadas(Estado, Ilhas_term): (1) 
 ilhas_terminadas([],[]) :- !.
 ilhas_terminadas([A|B],[Ilha|Res]) :- 
     ilhas_terminadas_aux(A,Ilha),
@@ -160,21 +169,21 @@ ilhas_terminadas_aux([ilha(N,Pos),_,Res],ilha(N,Pos)) :-
     Len =:= N.
 
 
-% 2.11 tira_ilhas_terminadas_entrada(Ilhas_term, Entrada, Nova_entrada): (1) doen mooshak
+% 2.11 tira_ilhas_terminadas_entrada(Ilhas_term, Entrada, Nova_entrada): (1) 
 tira_ilhas_terminadas_entrada(Ilhas_term, [Ilha,Viz_og,Pontes], [Ilha,Viz_new,Pontes]):-
     findall(Ilhas, (member(Ilhas,Viz_og),\+(member(Ilhas,Ilhas_term))),Viz_new).
 
-% 2.12 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado): (1) done mooshak
+% 2.12 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado): (1) 
 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
     maplist(tira_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
 
-% 2.13 marca_ilhas_terminadas_entrada(Ilhas_term, Entrada,Nova_entrada):(1) done mooshak
+% 2.13 marca_ilhas_terminadas_entrada(Ilhas_term, Entrada,Nova_entrada):(1) 
 marca_ilhas_terminadas_entrada(Ilhas_term, [ilha(N_L,A),Vizinhas,Pontes],[ilha('X',A),Vizinhas,Pontes]) :-
     member(ilha(N_L,A),Ilhas_term),!.
 marca_ilhas_terminadas_entrada(_,Entrada,Entrada).
 
 
-% 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):(1) Done mooshak
+% 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):(1) 
 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
     maplist(marca_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
 
