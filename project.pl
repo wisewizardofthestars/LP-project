@@ -28,7 +28,7 @@ extrai_ilhas_linha(N_L,[A|B],Cont,Res) :-
 % 2.2 ilhas(Puz, Ilhas) : 
 /*Puz -> e um puzzle 
 Ilhas -> lista organizada (esquerda para direita, cima para baixo),
-cujos elementos são ilhas de Puz*/
+cujos elementos sao ilhas de Puz*/
 
 ilhas(Puz, IlhasF) :- ilhas(Puz,0,Ilhas),
     append(Ilhas,IlhasF).
@@ -40,6 +40,9 @@ ilhas([A|B], Cont_linhas, [Y|X]):-
     ilhas(B, Cont_linhas1,X).
 
 % 2.3 vizinhas(Ilhas, Ilha, Vizinhas): 
+/*Ilhas -> lista de ilhas de um puzzle 
+Ilha -> uma das ilhas de um puzzle contida na lista Ilhas
+Vizinhas -> lista ordenada cujos elementos sao as ilhas vizinhas de Ilha*/
 
 vizinhas(Ilhas,Ilha,Vizinhas) :- 
     Ilha = ilha(_,(Linha_og,Coluna_og)),
@@ -63,6 +66,12 @@ vizinhas(Ilhas,Ilha,Vizinhas) :-
 
 
 % 2.4 estado(Ilhas, Estado):  
+/*Entrada : elemento 1 e uma ilha,
+    elemento 2 e uma lista de vizinhas dessa ilha,
+    elemento 3 e a lista de pontes da ilha (vazia no inicio)
+Ilhas -> lista de ilhas de um puzzle
+Estado -> lista ordenada cujos elementos sao entradas referentes a cada
+uma das ilhas de Ilhas*/
 
 estado(Ilhas,Estado) :- estado(Ilhas,Estado,Ilhas).
 estado([Ilha|B],[[Ilha,Vizinhas,[]]|Res],Ilhas) :-
@@ -72,6 +81,9 @@ estado([],[],_).
 
 
 % 2.5 posicoes_entre(Pos1, Pos2, Posicoes): 
+/*Pos1 e Pos2 -> posicoes
+Posicoes -> e a lista ordenada de posicoes entre Pos1 e Pos2, excluindo
+Se Pos1 e Pos2 nao pertencerem a mesma linha ou coluna deve devolver falso*/
 posicoes_entre((X1,Y1),(X1,Y2),Posicoes) :- 
     Max is max(Y1,Y2) - 1,
     Min is min(Y1,Y2) + 1,
