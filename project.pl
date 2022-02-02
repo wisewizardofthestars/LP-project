@@ -149,12 +149,22 @@ actualiza_vizinhas_entrada(Pos1,Pos2,Posicoes,[Ilha,Vizinhas|B],[Ilha,Aux|B]) :-
     include(caminho_livre(Pos1,Pos2,Posicoes,Ilha),Vizinhas,Aux).
     
 
-% 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado): (0.5) 
+% 2.9 actualiza_vizinhas_apos_pontes(Estado, Pos1, Pos2, Novo_estado): 
+/*Estado -> e um estado
+Pos1 e Pos2 -> sao posicoes entre as quais foi adicionada uma ponte
+Novo_estado e o estado que se obtem de Estado apos a atualizacao das ilhas vizinhas*/
+
 actualiza_vizinhas_apos_pontes(Estado,Pos1,Pos2,Novo_estado) :-
     posicoes_entre(Pos1,Pos2,Posicoes),
     maplist(actualiza_vizinhas_entrada(Pos1, Pos2, Posicoes),Estado,Novo_estado).
 
-% 2.10 ilhas_terminadas(Estado, Ilhas_term): (1) 
+% 2.10 ilhas_terminadas(Estado, Ilhas_term): 
+/*Estado -> e um estado
+Ilhas_ter e a lista de ilhas que ja tem todas as ponets associadas, ilhas terminadas
+uma ilha esta terminada se o Nr de pontes for diferente de 'X' e o comprimento
+da lista de pontes (elemento 3 do estado) for igual ao Nr de pontes
+*/
+
 ilhas_terminadas([],[]) :- !.
 ilhas_terminadas([A|B],[Ilha|Res]) :- 
     ilhas_terminadas_aux(A,Ilha),
@@ -169,21 +179,37 @@ ilhas_terminadas_aux([ilha(N,Pos),_,Res],ilha(N,Pos)) :-
     Len =:= N.
 
 
-% 2.11 tira_ilhas_terminadas_entrada(Ilhas_term, Entrada, Nova_entrada): (1) 
+% 2.11 tira_ilhas_terminadas_entrada(Ilhas_term, Entrada, Nova_entrada): 
+/*Estado -> e um estado
+Ilhas_term -> e a lista de ilhas terminadas
+Nova_entrada -> e a entrada resultante de remover as ilhas de Ilhas_term
+da lista de ilhas vizinhas de entrada*/
+
 tira_ilhas_terminadas_entrada(Ilhas_term, [Ilha,Viz_og,Pontes], [Ilha,Viz_new,Pontes]):-
     findall(Ilhas, (member(Ilhas,Viz_og),\+(member(Ilhas,Ilhas_term))),Viz_new).
 
-% 2.12 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado): (1) 
+% 2.12 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado): 
+/*Estado -> e um estado
+Ilhas_term -> e uma lista de ilhas terminadas
+Novo_estado -> e o estdo resulatnte de aplicar o predicado 2.11 a cada uma
+das entradas de Estado*/
+
 tira_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
     maplist(tira_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
 
-% 2.13 marca_ilhas_terminadas_entrada(Ilhas_term, Entrada,Nova_entrada):(1) 
+% 2.13 marca_ilhas_terminadas_entrada(Ilhas_term, Entrada,Nova_entrada):
+/*Ilhas_term -> lista de ilhas terminadas
+Entrada -> e uma entrada
+Nova_entrada -> entrada obtida de Entrada: se a ilha de Entrada pertencer
+a Ilhas_term o nr de pontes desta e substituido por 'X', caso contrario
+Nova_entrada e igual a Entrada*/
+
 marca_ilhas_terminadas_entrada(Ilhas_term, [ilha(N_L,A),Vizinhas,Pontes],[ilha('X',A),Vizinhas,Pontes]) :-
     member(ilha(N_L,A),Ilhas_term),!.
 marca_ilhas_terminadas_entrada(_,Entrada,Entrada).
 
 
-% 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):(1) 
+% 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):
 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
     maplist(marca_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
 
