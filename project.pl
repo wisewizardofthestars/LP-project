@@ -210,16 +210,30 @@ marca_ilhas_terminadas_entrada(_,Entrada,Entrada).
 
 
 % 2.14 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado):
+/*Estado -> e um estado
+Ilahs_term -> lista de ilhas terminadas
+Novo_estado -> estado resultante de aplicar o predicado 2.13 a 
+cada uma das entradas de Estado*/
+
 marca_ilhas_terminadas(Estado, Ilhas_term, Novo_estado) :-
     maplist(marca_ilhas_terminadas_entrada(Ilhas_term),Estado,Novo_estado).
 
-% 2.15 trata_ilhas_terminadas(Estado, Novo_estado):(1)
+% 2.15 trata_ilhas_terminadas(Estado, Novo_estado):
+/*Estado -> e um estado
+Novo_estado -> estado resultante de se aplicar os predicados 2.14 e 2.12
+a Estado*/
+
 trata_ilhas_terminadas(Estado, Novo_estado) :-
     ilhas_terminadas(Estado,Ilhas_term),
     tira_ilhas_terminadas(Estado,Ilhas_term,Aux),
     marca_ilhas_terminadas(Aux,Ilhas_term,Novo_estado).
 
-% 2.16 junta_pontes(Estado, Num_pontes, Ilha1, Ilha2, Novo_estado):(1)
+% 2.16 junta_pontes(Estado, Num_pontes, Ilha1, Ilha2, Novo_estado):
+/*Estado -> e um estado
+Ilha1 e Ilha2 -> sao 2 ilhas 
+Novo_estado -> e o estado que se obtem de Estado por adicao do
+Num_pontes entre Ilha1 e Ilha2*/
+
 junta_pontes(Novo,0,ilha(_,(X1,Y1)), ilha(_,(X2,Y2)),Novo_estado) :- junta_pontes_aux(Novo,(X1,Y1),(X2,Y2),Novo_estado).
     %caso terminal que ira levar a parte final de atualizar e tratar ilhas terminadas
 
