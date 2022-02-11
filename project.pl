@@ -1,5 +1,4 @@
-% ist1102507    %
-% Sara Pinheiro %
+
 % LP 2021/2022  %
 
 % Solucionador de Puzzles Hashi (Parte 1)
