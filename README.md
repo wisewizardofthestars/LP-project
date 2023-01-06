@@ -1,7 +1,7 @@
 # LP
-**Logic for Programming** (LP) project
+**Logic for Programming** (LP) project implemented in Prolog
 
 
 
-*Final Grade:* /20
+*Final Grade:* 19.7/20
 
